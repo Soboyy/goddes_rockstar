@@ -4,39 +4,25 @@ include 'koneksi.php';
 $keyword = "";
 $query   = "";
 
-// Cek apakah ada keyword search
-// Referensi: https://www.w3schools.com/php/php_forms.asp
 if (isset($_GET['keyword']) && $_GET['keyword'] !== "") {
     $keyword      = $_GET['keyword'];
     $keyword_safe = mysqli_real_escape_string($conn, $keyword);
 
-    // Query JOIN + LIKE untuk search lirik
-    // Referensi: https://www.w3schools.com/sql/sql_join.asp
-$query = "
-SELECT lagu.id, lagu.judul, lagu.album, lagu.tahun,
-    members.nama AS vokalis
-FROM lagu
-JOIN members ON lagu.id_member = members.id_member
-WHERE lagu.lirik LIKE '%$keyword_safe%'
-ORDER BY lagu.tahun DESC
-";
-
+    $query = "SELECT lagu.id_lagu, lagu.judul, lagu.album, lagu.tahun, members.nama AS vokalis
+              FROM lagu
+              JOIN members ON lagu.id_member = members.id_member
+              WHERE lagu.lirik LIKE '%$keyword_safe%'
+              ORDER BY lagu.tahun DESC";
 } else {
-
-    // Kalau tidak search tampilkan semua lagu
-    $query = "
-    SELECT lagu.id, lagu.judul, lagu.album, lagu.tahun,
-        members.nama AS vokalis
-    FROM lagu
-    JOIN members ON lagu.id_member = members.id_member
-    ORDER BY lagu.tahun DESC
-    ";
+    $query = "SELECT lagu.id_lagu, lagu.judul, lagu.album, lagu.tahun, members.nama AS vokalis
+              FROM lagu
+              JOIN members ON lagu.id_member = members.id_member
+              ORDER BY lagu.tahun DESC";
 }
 
 $result = mysqli_query($conn, $query);
 $lagu   = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -63,18 +49,14 @@ $lagu   = mysqli_fetch_all($result, MYSQLI_ASSOC);
         <a href="tambah_lagu.php" class="btn btn-add">+ Tambah Lagu</a>
     </div>
 
-    <!-- SEARCH BAR -->
     <form method="GET" action="lagu.php" class="search-form-inline">
-        <input type="text" name="keyword"
-               placeholder="Cari berdasarkan lirik..."
-               value="<?= htmlspecialchars($keyword) ?>">
+        <input type="text" name="keyword" placeholder="Cari berdasarkan lirik..." value="<?= htmlspecialchars($keyword) ?>">
         <button type="submit">🔍 Cari</button>
         <?php if ($keyword): ?>
             <a href="lagu.php" class="btn btn-reset">✕ Reset</a>
         <?php endif; ?>
     </form>
 
-    <!-- HASIL SEARCH INFO -->
     <?php if ($keyword): ?>
         <p class="search-info">
             Hasil pencarian "<strong><?= htmlspecialchars($keyword) ?></strong>":
@@ -82,7 +64,6 @@ $lagu   = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </p>
     <?php endif; ?>
 
-    <!-- TABEL LAGU -->
     <?php if (count($lagu) > 0): ?>
         <table class="tabel">
             <thead>
@@ -104,16 +85,13 @@ $lagu   = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <td><?= $row['tahun'] ?></td>
                     <td><?= htmlspecialchars($row['vokalis']) ?></td>
                     <td class="aksi">
-                        <a href="edit_lagu.php?id=<?= $row['id'] ?>" class="btn btn-edit">✏️ Edit</a>
-                        <a href="hapus_lagu.php?id=<?= $row['id'] ?>"
-                           class="btn btn-delete"
-                           onclick="return confirm('Yakin hapus lagu ini?')">🗑️ Hapus</a>
+                        <a href="edit_lagu.php?id=<?= $row['id_lagu'] ?>" class="btn btn-edit">✏️ Edit</a>
+                        <a href="hapus_lagu.php?id=<?= $row['id_lagu'] ?>" class="btn btn-delete" onclick="return confirm('Yakin hapus lagu ini?')">🗑️ Hapus</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-
     <?php else: ?>
         <div class="not-found">
             <p>😔 Tidak ada lagu yang cocok dengan "<strong><?= htmlspecialchars($keyword) ?></strong>"</p>
