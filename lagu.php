@@ -2,40 +2,33 @@
 include 'koneksi.php';
 
 $keyword = "";
-// 1. Logika untuk menangkap input pencarian
+$query   = "";
+
 if (isset($_GET['keyword']) && $_GET['keyword'] !== "") {
-    $keyword = $_GET['keyword'];
+    $keyword      = $_GET['keyword'];
     $keyword_safe = mysqli_real_escape_string($conn, $keyword);
-    // Mencari data yang COCOK dengan wilayah atau nama_region
-    $query = "SELECT * FROM regions WHERE wilayah LIKE '%$keyword_safe%' OR nama_region LIKE '%$keyword_safe%'";
+
+    $query = "SELECT lagu.id_lagu, lagu.judul, lagu.album, lagu.tahun, members.nama AS vokalis
+              FROM lagu
+              JOIN members ON lagu.id_member = members.id_member
+              WHERE lagu.lirik LIKE '%$keyword_safe%'
+              ORDER BY lagu.tahun DESC";
 } else {
-    // Jika tidak ada pencarian, tampilkan semua data region
-    $query = "SELECT * FROM regions";
+    $query = "SELECT lagu.id_lagu, lagu.judul, lagu.album, lagu.tahun, members.nama AS vokalis
+              FROM lagu
+              JOIN members ON lagu.id_member = members.id_member
+              ORDER BY lagu.tahun DESC";
 }
 
 $result = mysqli_query($conn, $query);
-$regions = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$lagu   = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Region Reality Club - Goddess Rockstar</title>
+    <title>Daftar Lagu - Goddess Rockstar</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .btn-join {
-            background-color: #ff9f00;
-            color: #000 !important;
-            font-weight: bold;
-            padding: 6px 12px;
-            border-radius: 20px;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-        }
-        .btn-join:hover { background-color: #e68a00; }
-        .aksi-container { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
-    </style>
 </head>
 <body>
 <div class="layout">
@@ -44,10 +37,9 @@ $regions = mysqli_fetch_all($result, MYSQLI_ASSOC);
         <div class="sidebar-brand">🎸 Goddess<br>Rockstar</div>
         <nav class="sidebar-nav">
             <a href="index.php">🏠 Home</a>
-            <a href="lagu.php">🎵 Lagu</a>
-            <a href="members.php">🎤 Members</a>
+            <a href="lagu.php" class="active">🎵 Lagu</a> <a href="members.php">🎤 Members</a>
             <a href="gigs.php">🎪 Gigs</a>
-            <a href="region.php" class="active">🌎 Region</a>
+            <a href="region.php">🌎 Region</a>
         </nav>
     </aside>
 
@@ -55,57 +47,48 @@ $regions = mysqli_fetch_all($result, MYSQLI_ASSOC);
         <div class="container">
 
             <div class="page-header">
-                <h2>🌎 Daftar Region</h2>
-                <a href="tambah_region.php" class="btn btn-add">+ Tambah Region</a>
+                <h2>🎵 Daftar Lagu</h2>
+                <a href="tambah_lagu.php" class="btn btn-add">+ Tambah Lagu</a>
             </div>
 
-            <form method="GET" action="region.php" class="search-form-inline">
-                <input type="text" name="keyword" placeholder="Cari berdasarkan wilayah/nama..." value="<?= htmlspecialchars($keyword) ?>">
+            <form method="GET" action="lagu.php" class="search-form-inline">
+                <input type="text" name="keyword" placeholder="Cari berdasarkan lirik..." value="<?= htmlspecialchars($keyword) ?>">
                 <button type="submit">🔍 Cari</button>
                 <?php if ($keyword): ?>
-                    <a href="region.php" class="btn btn-reset">✕ Reset</a>
+                    <a href="lagu.php" class="btn btn-reset">✕ Reset</a>
                 <?php endif; ?>
             </form>
 
             <?php if ($keyword): ?>
                 <p class="search-info">
-                    Hasil pencarian "<strong><?= htmlspecialchars($keyword) ?></strong>": 
-                    <strong><?= count($regions) ?></strong> region ditemukan
+                    Hasil pencarian "<strong><?= htmlspecialchars($keyword) ?></strong>":
+                    <strong><?= count($lagu) ?></strong> lagu ditemukan
                 </p>
             <?php endif; ?>
 
-            <?php if (count($regions) > 0): ?>
+            <?php if (count($lagu) > 0): ?>
                 <table class="tabel">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Wilayah</th>
-                            <th>Nama Region</th>
-                            <th>Koordinator</th>
-                            <th>Deskripsi</th>
+                            <th>Judul</th>
+                            <th>Album</th>
+                            <th>Tahun</th>
+                            <th>Vokalis</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($regions as $i => $row): ?>
+                        <?php foreach ($lagu as $i => $row): ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
-                            <td><strong><?= htmlspecialchars($row['wilayah']) ?></strong></td>
-                            <td><?= htmlspecialchars($row['nama_region']) ?></td>
-                            <td><?= htmlspecialchars($row['koordinator']) ?></td>
-                            <td><?= htmlspecialchars($row['deskripsi']) ?></td>
-                            <td>
-                                <div class="aksi-container">
-                                    <a href="https://<?= htmlspecialchars($row['link_grup']) ?>" target="_blank" class="btn-join">🔗 Gabung</a>
-                                    
-                                    <?php 
-                                    // Menghindari error id tidak terdefinisi
-                                    $id_region = isset($row['id_region']) ? $row['id_region'] : (isset($row['id']) ? $row['id'] : ''); 
-                                    ?>
-
-                                    <a href="edit_region.php?id=<?= $id_region ?>" class="btn btn-edit">✏️ Edit</a>
-                                    <a href="hapus_region.php?id=<?= $id_region ?>" class="btn btn-delete" onclick="return confirm('Yakin hapus region ini?')">🗑️ Hapus</a>
-                                </div>
+                            <td><?= htmlspecialchars($row['judul']) ?></td>
+                            <td><?= htmlspecialchars($row['album']) ?></td>
+                            <td><?= $row['tahun'] ?></td>
+                            <td><?= htmlspecialchars($row['vokalis']) ?></td>
+                            <td class="aksi">
+                                <a href="edit_lagu.php?id=<?= $row['id_lagu'] ?>" class="btn btn-edit">✏️ Edit</a>
+                                <a href="hapus_lagu.php?id=<?= $row['id_lagu'] ?>" class="btn btn-delete" onclick="return confirm('Yakin hapus lagu ini?')">🗑️ Hapus</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -113,7 +96,7 @@ $regions = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </table>
             <?php else: ?>
                 <div class="not-found">
-                    <p>😔 Tidak ada region yang cocok dengan "<strong><?= htmlspecialchars($keyword) ?></strong>"</p>
+                    <p>😔 Tidak ada lagu yang cocok dengan "<strong><?= htmlspecialchars($keyword) ?></strong>"</p>
                 </div>
             <?php endif; ?>
 
