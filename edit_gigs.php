@@ -45,16 +45,19 @@ $p = explode("|", $pesan);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="layout">
 
-<nav class="navbar">
-    <div class="nav-brand">🎸 Goddess Rockstar</div>
-    <div class="nav-links">
-        <a href="index.php">Home</a>
-        <a href="lagu.php">Lagu</a>
-        <a href="members.php">Members</a>
-        <a href="gigs.php" class="active">Gigs</a>
-    </div>
-</nav>
+    <aside class="sidebar">
+        <div class="sidebar-brand">🎸 Goddess<br>Rockstar</div>
+        <nav class="sidebar-nav">
+            <a href="index.php">🏠 Home</a>
+            <a href="lagu.php">🎵 Lagu</a>
+            <a href="members.php">🎤 Members</a>
+            <a href="gigs.php">🎪 Gigs</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
 
 <div class="container">
     <div class="page-header">
@@ -67,7 +70,7 @@ $p = explode("|", $pesan);
     <?php endif; ?>
 
     <div class="form-box">
-        <form method="POST" action="edit_gig.php?id=<?= $id ?>">
+        <form method="POST" action="edit_gigs.php?id=<?= $id ?>">
 
             <div class="form-group">
                 <label>Nama Event *</label>

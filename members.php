@@ -12,17 +12,20 @@ $members = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM members"), MYSQLI
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="layout">
 
-<nav class="navbar">
-    <div class="nav-brand">🎸 Goddess Rockstar</div>
-    <div class="nav-links">
-        <a href="index.php">Home</a>
-        <a href="lagu.php">Lagu</a>
-        <a href="members.php" class="active">Members</a>
-        <a href="gigs.php">Gigs</a>
-    </div>
-</nav>
+    <aside class="sidebar">
+        <div class="sidebar-brand">🎸 Goddess<br>Rockstar</div>
+        <nav class="sidebar-nav">
+            <a href="index.php">🏠 Home</a>
+            <a href="lagu.php">🎵 Lagu</a>
+            <a href="members.php">🎤 Members</a>
+            <a href="gigs.php">🎪 Gigs</a>
+        </nav>
+    </aside>
 
+    <main class="main-content">
+        
 <div class="container">
     <div class="page-header">
         <h2>🎤 Members Reality Club</h2>
@@ -32,7 +35,15 @@ $members = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM members"), MYSQLI
     <div class="member-grid">
         <?php foreach ($members as $m): ?>
         <div class="member-card">
-            <div class="member-avatar">🎵</div>
+            
+            <div class="member-avatar">
+                <?php if (!empty($m['foto_url'])): ?>
+                    <img src="<?= htmlspecialchars($m['foto_url']) ?>" alt="<?= htmlspecialchars($m['nama']) ?>">
+                <?php else: ?>
+                    🎵
+                <?php endif; ?>
+    </div>
+        
             <div class="member-name"><?= htmlspecialchars($m['nama']) ?></div>
             <div class="member-role"><?= htmlspecialchars($m['role']) ?></div>
             <div class="member-bio"><?= htmlspecialchars($m['bio']) ?></div>

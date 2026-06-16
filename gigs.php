@@ -19,21 +19,24 @@ $gigs   = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="layout">
 
-<nav class="navbar">
-    <div class="nav-brand">🎸 Goddess Rockstar</div>
-    <div class="nav-links">
-        <a href="index.php">Home</a>
-        <a href="lagu.php">Lagu</a>
-        <a href="members.php">Members</a>
-        <a href="gigs.php" class="active">Gigs</a>
-    </div>
-</nav>
+    <aside class="sidebar">
+        <div class="sidebar-brand">🎸 Goddess<br>Rockstar</div>
+        <nav class="sidebar-nav">
+            <a href="index.php">🏠 Home</a>
+            <a href="lagu.php">🎵 Lagu</a>
+            <a href="members.php">🎤 Members</a>
+            <a href="gigs.php">🎪 Gigs</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
 
 <div class="container">
     <div class="page-header">
         <h2>🎪 Jadwal Gigs</h2>
-        <a href="tambah_gig.php" class="btn btn-add">+ Tambah Gig</a>
+        <a href="tambah_gigs.php" class="btn btn-add">+ Tambah Gig</a>
     </div>
 
     <table class="tabel">
@@ -64,8 +67,8 @@ $gigs   = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </span>
                 </td>
                 <td class="aksi">
-                    <a href="edit_gig.php?id=<?= $g['id_gig'] ?>" class="btn btn-edit">✏️ Edit</a>
-                    <a href="hapus_gig.php?id=<?= $g['id_gig'] ?>"
+                    <a href="edit_gigs.php?id=<?= $g['id_gig'] ?>" class="btn btn-edit">✏️ Edit</a>
+                    <a href="hapus_gigs.php?id=<?= $g['id_gig'] ?>"
                        class="btn btn-delete"
                        onclick="return confirm('Yakin hapus gig ini?')">🗑️ Hapus</a>
                 </td>
