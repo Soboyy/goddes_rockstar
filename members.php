@@ -21,6 +21,7 @@ $members = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM members"), MYSQLI
             <a href="lagu.php">🎵 Lagu</a>
             <a href="members.php">🎤 Members</a>
             <a href="gigs.php">🎪 Gigs</a>
+            <a href="region.php">🌎 Region</a>
         </nav>
     </aside>
 

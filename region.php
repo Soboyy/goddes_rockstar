@@ -2,11 +2,11 @@
 include 'koneksi.php';
 
 $keyword = "";
-// 1. Logika untuk menangkap input pencarian
+// Logika untuk menangkap input pencarian
 if (isset($_GET['keyword']) && $_GET['keyword'] !== "") {
     $keyword = $_GET['keyword'];
     $keyword_safe = mysqli_real_escape_string($conn, $keyword);
-    // Mencari data yang COCOK dengan wilayah atau nama_region
+    // Mencari data yang cocok dengan wilayah atau nama_region
     $query = "SELECT * FROM regions WHERE wilayah LIKE '%$keyword_safe%' OR nama_region LIKE '%$keyword_safe%'";
 } else {
     // Jika tidak ada pencarian, tampilkan semua data region
@@ -113,7 +113,7 @@ $regions = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 </table>
             <?php else: ?>
                 <div class="not-found">
-                    <p>😔 Tidak ada region yang cocok dengan "<strong><?= htmlspecialchars($keyword) ?></strong>"</p>
+                    <p>Tidak ada region yang cocok dengan "<strong><?= htmlspecialchars($keyword) ?></strong>"</p>
                 </div>
             <?php endif; ?>
 
