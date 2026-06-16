@@ -44,20 +44,26 @@
 
         <!-- MEMBER SHOWCASE -->
         <div class="showcase">
-            <h2>Meet The Band</h2>
-            <div class="showcase-scroll">
-                <?php
-                    $members = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM members"), MYSQLI_ASSOC);
-                    foreach ($members as $m):
-                ?>
-                <div class="showcase-card">
-                    <div class="showcase-avatar">🎵</div>
-                    <div class="showcase-name"><?= htmlspecialchars($m['nama']) ?></div>
-                    <div class="showcase-role"><?= htmlspecialchars($m['role']) ?></div>
-                </div>
-                <?php endforeach; ?>
+    <h2>Meet The Band</h2>
+    <div class="showcase-scroll">
+        <?php
+            $members = mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM members"), MYSQLI_ASSOC);
+            foreach ($members as $m):
+        ?>
+        <div class="showcase-card">
+            <div class="showcase-avatar">
+                <?php if (!empty($m['foto_url'])): ?>
+                    <img src="<?= htmlspecialchars($m['foto_url']) ?>" alt="<?= htmlspecialchars($m['nama']) ?>">
+                <?php else: ?>
+                    🎵
+                <?php endif; ?>
             </div>
+            <div class="showcase-name"><?= htmlspecialchars($m['nama']) ?></div>
+            <div class="showcase-role"><?= htmlspecialchars($m['role']) ?></div>
         </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
         <!-- STATS -->
         <?php
