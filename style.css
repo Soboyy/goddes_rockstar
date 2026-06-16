@@ -127,15 +127,15 @@ body{
     max-width:700px;
     margin:auto;
     display:flex;
-    gap:15px;
+    gap:15px; 
 }
 .search-form input{
     flex:1;
     background:rgba(255,255,255,.06);
-    border:2px solid rgba(255,255,255,.12);
+    border:2px solid rgb(255, 255, 255);
     border-radius:999px;
     padding:18px 25px;
-    color:white;
+    color:rgb(255, 255, 255);
     font-size:1rem;
     transition:.3s;
 }
@@ -149,12 +149,17 @@ body{
     border-radius:999px;
     padding:0 30px;
     background:linear-gradient(135deg, var(--yellow), var(--orange));
-    color:black;
+    color:rgb(255, 255, 255);
     font-weight:bold;
     cursor:pointer;
     transition:.3s;
 }
 .search-form button:hover{ transform:translateY(-2px); }
+
+.search-form input::placeholder{
+    color: #ffffff;
+    opacity: 1;
+}
 
 /* =========================
    SEARCH INLINE (halaman Lagu, dll)
@@ -178,7 +183,7 @@ body{
 }
 
 .search-form-inline input::placeholder{
-    color:var(--muted);
+    color: #ffffff;
 }
 
 .search-form-inline input:focus{
