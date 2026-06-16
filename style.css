@@ -99,9 +99,12 @@ body{
 .hero{
     padding:100px 40px;
     text-align:center;
+    position:relative;
     background:
-        linear-gradient(135deg, rgba(228,79,10,.45), rgba(186,1,26,.25), rgba(11,75,139,.45)),
-        radial-gradient(circle at 30% 30%, rgba(252,245,175,.08), transparent 40%);
+        linear-gradient(135deg, rgba(186,1,26,.55), rgba(228,79,10,.4), rgba(11,75,139,.55)),
+        url('image/group/reality_club_band.jpg');
+    background-size:cover;
+    background-position:center;
 }
 
 .hero h1{
